@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Variables JSON Viewer</title>
+    <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+<div class="layout">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-header-title">
+                Variables JSON Viewer
+            </div>
+            <button id="newVarBtn" class="btn-small" type="button">
+                + New
+            </button>
+        </div>
+        <div class="sidebar-search">
+            <input id="searchInput" type="text" placeholder="Filter by key..." />
+        </div>
+        <div id="varList" class="var-list">
+            <div class="empty-state">Loading variables...</div>
+        </div>
+    </div>
+    <div id="resizer" class="resizer"></div>
+    <div class="main">
+        <div class="main-body">
+            <div>
+                <div class="field-label">Key</div>
+                <input id="keyInput" class="field-input" type="text" readonly />
+            </div>
+            <div class="value-block">
+                <div class="field-label">Value</div>
+                <textarea id="valueTextarea" class="field-textarea"></textarea>
+            </div>
+            <div class="description-section">
+                <button id="descToggle" class="desc-toggle" type="button">
+                    <span id="descToggleArrow">▶</span> Description
+                </button>
+                <div id="descPanel" class="desc-panel hidden">
+                    <div class="field-label" style="margin-top:6px;">Description</div>
+                    <textarea id="descTextarea" class="desc-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-left">
+                <button id="themeToggle" class="theme-toggle" type="button">
+                    🌙 Dark
+                </button>
+                <div id="status" class="status"></div>
+            </div>
+            <button id="saveBtn" class="btn btn-primary" type="button" disabled>Save</button>
+        </div>
+    </div>
+</div>
+
+<script src="./static/app.js"></script>
+</body>
+</html>
