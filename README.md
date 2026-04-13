@@ -1,13 +1,58 @@
+![PyPI](https://img.shields.io/pypi/v/airflow-variable-json-viewer)
+![Python](https://img.shields.io/pypi/pyversions/airflow-variable-json-viewer)
+
 # airflow-variable-json-viewer
 
-An Apache Airflow plugin that adds a dedicated page for viewing and editing variables with JSON value display.
+A better way to work with JSON-based Airflow Variables.
+
+A modern Airflow UI plugin for browsing and editing Variables with 
+formatted JSON, search, and an improved user experience.
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="docs/images/default_var_edit.png" width="800" alt="Default Airflow Variables UI"/>
+        <em>Default</em>
+      </td>
+      <td align="center">
+        <img src="docs/images/new_version_dark.png" width="800" alt="Variables JSON Viewer plugin UI"/>
+        <em>Plugin</em>
+      </td>
+    </tr>
+  </table>
+</div>
+
+## Quick start
+
+```bash
+pip install airflow-variable-json-viewer
+```
+
+## Why?
+
+Airflow's default Variables UI is hard to use when working with JSON values:
+- No formatting or readability
+- Difficult to edit complex structures
+- Limited visibility into nested data
+
+This plugin provides a clean and user-friendly interface for working with JSON-based variables.
 
 ## Features
 
-- 📋 View all Airflow variables in a list
-- ✏️ Edit variable values with JSON pretty-printing
-- 📁 Import variables from `variables.json` file (from `AIRFLOW_HOME`)
-- 🔒 Display variable encryption status
+- 📋 Browse all Airflow variables with instant search
+- ✏️ Edit values with automatic JSON formatting
+- 🔍 Easily read and navigate complex nested structures
+- 🔒 View variable encryption status
+- 🌓 Built-in dark and light modes
+
+
+<p align="center">
+  <img src="docs/images/new_version_light.png" width="800" alt="Light mode UI"/>
+  <br/>
+  <em>Light version</em>
+</p>
+
 
 ## Compatibility
 
@@ -17,6 +62,8 @@ An Apache Airflow plugin that adds a dedicated page for viewing and editing vari
 ---
 
 ## Installation
+
+You can install the plugin either manually or via pip:
 
 ### Option 1: Manual copy to `plugins` folder
 
@@ -40,48 +87,25 @@ An Apache Airflow plugin that adds a dedicated page for viewing and editing vari
 pip install airflow-variable-json-viewer
 ```
 
-After installation, restart Airflow — the plugin will be automatically discovered via the `airflow.plugins` entry point.
+AfAfter installation, restart Airflow — the plugin will be automatically discovered.
+
+
 
 ---
 
 ## Usage
 
-After installation, a new menu item **"Variables JSON Viewer"** will appear in the Airflow navigation menu under the **Admin** section.
+After installation, a new menu item **"Variables JSON Viewer"** will appear in 
+the Airflow navigation menu under the **Admin** section.
 
-The plugin is available at:
+<p align="center">
+  <img src="docs/images/admin_section.png" width="300"/>
+</p>
+
+Or access it directly via:
 
 ```
 http://<your-airflow-host>/variable-json/
-```
-
-### Import from file
-
-Place a `variables.json` file in the `AIRFLOW_HOME` directory:
-
-```json
-{
-  "my_variable": "some_value",
-  "another_variable": {"key": "value"}
-}
-```
-
-Then click the **"Import from file"** button in the plugin UI (if available) or use the API endpoint.
-
----
-
-## Project Structure
-
-```
-airflow-variable-json-viewer/
-├── variable_json_viewer/       # Plugin Python package
-│   ├── __init__.py
-│   ├── plugin.py
-│   └── static/
-│       ├── index.html
-│       ├── app.js
-│       └── styles.css
-├── pyproject.toml
-├── README.md
 ```
 
 ---
