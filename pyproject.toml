@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "airflow-variable-json-viewer"
-version = "0.1.0"
+version = "0.1.1"
 description = "Apache Airflow plugin for viewing and editing variables with JSON display"
 authors = ["Yaroslav M <mr.night.sky@yandex.ru>"]
 license = "MIT"

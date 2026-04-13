@@ -8,20 +8,11 @@ A better way to work with JSON-based Airflow Variables.
 A modern Airflow UI plugin for browsing and editing Variables with 
 formatted JSON, search, and an improved user experience.
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="docs/images/default_var_edit.png" width="800" alt="Default Airflow Variables UI"/>
-        <em>Default</em>
-      </td>
-      <td align="center">
-        <img src="docs/images/new_version_dark.png" width="800" alt="Variables JSON Viewer plugin UI"/>
-        <em>Plugin</em>
-      </td>
-    </tr>
-  </table>
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/new_version_dark.png" width="800" alt="Variables JSON Viewer plugin UI"/>
+  <br/>
+  <em>Editing variables with formatted JSON</em>
+</p>
 
 ## Quick start
 
@@ -36,6 +27,12 @@ Airflow's default Variables UI is hard to use when working with JSON values:
 - Difficult to edit complex structures
 - Limited visibility into nested data
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/default_var_edit.png" width="800" alt="Default Airflow Variables UI"/>
+  <br/>
+  <em>Default Airflow UI without JSON formatting</em>
+</p>
+
 This plugin provides a clean and user-friendly interface for working with JSON-based variables.
 
 ## Features
@@ -48,9 +45,9 @@ This plugin provides a clean and user-friendly interface for working with JSON-b
 
 
 <p align="center">
-  <img src="docs/images/new_version_light.png" width="800" alt="Light mode UI"/>
+  <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/new_version_light.png" width="800" alt="Light mode UI"/>
   <br/>
-  <em>Light version</em>
+  <em>Light mode support</em>
 </p>
 
 
@@ -87,7 +84,7 @@ You can install the plugin either manually or via pip:
 pip install airflow-variable-json-viewer
 ```
 
-AfAfter installation, restart Airflow — the plugin will be automatically discovered.
+After installation, restart Airflow — the plugin will be automatically discovered.
 
 
 
@@ -99,7 +96,7 @@ After installation, a new menu item **"Variables JSON Viewer"** will appear in
 the Airflow navigation menu under the **Admin** section.
 
 <p align="center">
-  <img src="docs/images/admin_section.png" width="300"/>
+  <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/admin_section.png" width="300"/>
 </p>
 
 Or access it directly via:
