@@ -11,7 +11,7 @@ An Apache Airflow plugin that adds a dedicated page for viewing and editing vari
 
 ## Compatibility
 
-- Apache Airflow **2.8+**
+- Apache Airflow **3.1+**
 - Python **3.8+**
 
 ---
@@ -82,7 +82,6 @@ airflow-variable-json-viewer/
 │       └── styles.css
 ├── pyproject.toml
 ├── README.md
-└── LICENSE
 ```
 
 ---

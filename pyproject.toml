@@ -1,0 +1,24 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "airflow-variable-json-viewer"
+version = "0.1.0"
+description = "Apache Airflow plugin for viewing and editing variables with JSON display"
+authors = ["Yaroslav M <mr.night.sky@yandex.ru>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "variable_json_viewer"}]
+include = ["variable_json_viewer/static/**/*"]
+repository = "https://github.com/MrNightSky/airflow-variable-json-viewer"
+keywords = ["airflow", "variables", "json", "plugin"]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+apache-airflow = ">=3.1"
+fastapi = "*"
+pydantic = "*"
+
+[tool.poetry.plugins."airflow.plugins"]
+variable_json_plugin = "variable_json_viewer:VariableJsonPlugin"

@@ -33,3 +33,4 @@ Thumbs.db
 
 # Junie guidelines (внутренний файл агента)
 .junie/
+test/
