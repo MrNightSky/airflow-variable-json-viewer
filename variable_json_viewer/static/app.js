@@ -21,6 +21,9 @@
     let isNewVariable = false;
     let isSaving = false;
 
+    // Snapshot of the form state at the moment the variable was loaded
+    let savedSnapshot = null;
+
     function setStatus(message, kind) {
         statusEl.textContent = message || '';
         statusEl.className = 'status' + (kind ? ' ' + kind : '');
@@ -50,6 +53,29 @@
             }
         }
         applyTheme(theme);
+    }
+
+    function makeSnapshot() {
+        return {
+            key: keyInput.value,
+            description: descTextarea.value,
+            value: valueTextarea.value,
+        };
+    }
+
+    function isDirty() {
+        if (savedSnapshot === null) return false;
+        const current = makeSnapshot();
+        return (
+            current.key !== savedSnapshot.key ||
+            current.description !== savedSnapshot.description ||
+            current.value !== savedSnapshot.value
+        );
+    }
+
+    function confirmLeave() {
+        if (!isDirty()) return true;
+        return window.confirm('You have unsaved changes. Discard them and continue?');
     }
 
     async function loadVariables() {
@@ -114,6 +140,8 @@
             }
 
             item.addEventListener('click', function () {
+                if (v.key === activeKey) return;
+                if (!confirmLeave()) return;
                 selectVariable(v.key);
             });
 
@@ -131,6 +159,7 @@
         valueTextarea.value = '';
         activeKey = null;
         isNewVariable = false;
+        savedSnapshot = null;
         saveBtn.disabled = true;
         deleteBtn.disabled = true;
     }
@@ -204,9 +233,11 @@
 
     function applyVariableToForm(v) {
         keyInput.value = v.key || '';
-        keyInput.readOnly = !isNewVariable;
+        keyInput.readOnly = false;
         descTextarea.value = v.description || '';
         valueTextarea.value = toPrettyJSON(v.value || '');
+
+        savedSnapshot = makeSnapshot();
 
         saveBtn.disabled = false;
         deleteBtn.disabled = isNewVariable;
@@ -220,8 +251,8 @@
     async function saveCurrent() {
         if (isSaving) return;
 
-        const key = isNewVariable ? keyInput.value.trim() : activeKey;
-        if (!key) {
+        const newKey = keyInput.value.trim();
+        if (!newKey) {
             setStatus('Key cannot be empty', 'error');
             return;
         }
@@ -234,14 +265,30 @@
         setStatus('Saving...', '');
 
         try {
-            const resp = await fetch(
-                apiBase('/variables/' + encodeURIComponent(key)),
-                {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ description: description, value: value }),
-                }
-            );
+            let resp;
+
+            if (isNewVariable) {
+                // Create new variable via PATCH
+                resp = await fetch(
+                    apiBase('/variables/' + encodeURIComponent(newKey)),
+                    {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ description: description, value: value }),
+                    }
+                );
+            } else {
+                // Update existing variable (possibly with key rename) via PUT
+                resp = await fetch(
+                    apiBase('/variables/' + encodeURIComponent(activeKey)),
+                    {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ new_key: newKey, description: description, value: value }),
+                    }
+                );
+            }
+
             if (!resp.ok) {
                 const errData = await resp.json().catch(() => ({}));
                 throw new Error(errData.detail || 'HTTP ' + resp.status);
@@ -255,7 +302,12 @@
                 is_encrypted: v.is_encrypted === true,
             };
 
-            const idx = allVariables.findIndex(function (x) { return x.key === key; });
+            // Remove old key from cache if renamed
+            if (!isNewVariable && activeKey !== normalized.key) {
+                allVariables = allVariables.filter(function (x) { return x.key !== activeKey; });
+            }
+
+            const idx = allVariables.findIndex(function (x) { return x.key === normalized.key; });
             if (idx >= 0) {
                 allVariables[idx] = normalized;
             } else {
@@ -263,7 +315,7 @@
             }
 
             isNewVariable = false;
-            activeKey = key;
+            activeKey = normalized.key;
             applyFilter(searchInput.value);
             applyVariableToForm(normalized);
             setStatus('Saved', 'ok');
@@ -289,6 +341,8 @@
     }
 
     function createNewVariable() {
+        if (!confirmLeave()) return;
+
         isNewVariable = true;
         activeKey = null;
 
@@ -393,6 +447,7 @@
             allVariables = allVariables.filter(function (v) { return v.key !== key; });
             activeKey = null;
             isNewVariable = false;
+            savedSnapshot = null;
             applyFilter(searchInput.value);
             if (filteredVariables.length > 0) {
                 selectVariable(filteredVariables[0].key);

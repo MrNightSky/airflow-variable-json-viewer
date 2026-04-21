@@ -48,6 +48,12 @@ class VariableUpdateDTO(BaseModel):
     value: str
 
 
+class VariableRenameDTO(BaseModel):
+    new_key: str
+    description: Optional[str] = None
+    value: str
+
+
 # ------------------------
 # Python API endpoints
 # ------------------------
@@ -100,6 +106,54 @@ def update_variable(var_key: str, payload: VariableUpdateDTO) -> VariableDTO:
         row = (
             session.query(Variable)
             .filter(Variable.key == var_key)
+            .one()
+        )
+        return VariableDTO(
+            key=row.key,
+            description=getattr(row, "description", None),
+            value=row.val,
+            is_encrypted=getattr(row, "is_encrypted", False),
+        )
+
+
+@app.put("/api/variables/{var_key}", response_model=VariableDTO)
+def rename_variable(var_key: str, payload: VariableRenameDTO) -> VariableDTO:
+    """Renames a variable (changes its key) and updates value/description."""
+    new_key = payload.new_key.strip()
+    if not new_key:
+        raise HTTPException(status_code=400, detail="new_key cannot be empty")
+
+    with create_session() as session:
+        old_row = (
+            session.query(Variable)
+            .filter(Variable.key == var_key)
+            .one_or_none()
+        )
+        if old_row is None:
+            raise HTTPException(status_code=404, detail="Variable not found")
+
+        if new_key != var_key:
+            conflict = (
+                session.query(Variable)
+                .filter(Variable.key == new_key)
+                .one_or_none()
+            )
+            if conflict is not None:
+                raise HTTPException(status_code=409, detail=f"Variable '{new_key}' already exists")
+            session.delete(old_row)
+            session.flush()
+
+    Variable.set(
+        new_key,
+        payload.value,
+        description=payload.description,
+        serialize_json=False,
+    )
+
+    with create_session() as session:
+        row = (
+            session.query(Variable)
+            .filter(Variable.key == new_key)
             .one()
         )
         return VariableDTO(
