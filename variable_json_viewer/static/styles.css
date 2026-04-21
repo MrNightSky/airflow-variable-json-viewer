@@ -288,6 +288,16 @@ body.dark .footer {
     cursor: default;
 }
 
+.btn-danger {
+    background: #d32f2f;
+    color: white;
+}
+
+.btn-danger:disabled {
+    opacity: 0.1;
+    cursor: default;
+}
+
 .status {
     font-size: 12px;
     color: var(--text-muted-light);
@@ -385,4 +395,10 @@ body.dark .desc-textarea {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

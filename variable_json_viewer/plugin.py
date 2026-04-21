@@ -110,6 +110,21 @@ def update_variable(var_key: str, payload: VariableUpdateDTO) -> VariableDTO:
         )
 
 
+@app.delete("/api/variables/{var_key}")
+def delete_variable(var_key: str):
+    """Deletes a variable by key."""
+    with create_session() as session:
+        row = (
+            session.query(Variable)
+            .filter(Variable.key == var_key)
+            .one_or_none()
+        )
+        if row is None:
+            raise HTTPException(status_code=404, detail="Variable not found")
+        session.delete(row)
+    return {"status": "ok"}
+
+
 @app.post("/api/sync-file")
 def sync_variables_from_file():
     """Imports variables from AIRFLOW_HOME/variables.json into the database."""

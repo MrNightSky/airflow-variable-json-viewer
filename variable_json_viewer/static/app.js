@@ -6,6 +6,7 @@
     const valueTextarea = document.getElementById('valueTextarea');
     const statusEl = document.getElementById('status');
     const saveBtn = document.getElementById('saveBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
     const themeToggle = document.getElementById('themeToggle');
     const descToggle = document.getElementById('descToggle');
     const descPanel = document.getElementById('descPanel');
@@ -131,6 +132,7 @@
         activeKey = null;
         isNewVariable = false;
         saveBtn.disabled = true;
+        deleteBtn.disabled = true;
     }
 
     function getVariableFromCache(key) {
@@ -207,6 +209,7 @@
         valueTextarea.value = toPrettyJSON(v.value || '');
 
         saveBtn.disabled = false;
+        deleteBtn.disabled = isNewVariable;
         if (v.is_encrypted) {
             setStatus('Value is encrypted (stored as cipher in DB, shown as decrypted here)', 'ok');
         } else {
@@ -366,6 +369,44 @@
     newVarBtn.addEventListener('click', function () {
         createNewVariable();
     });
+
+    deleteBtn.addEventListener('click', function () {
+        if (!activeKey) return;
+        const confirmed = window.confirm('Delete variable "' + activeKey + '"? This action cannot be undone.');
+        if (!confirmed) return;
+        deleteVariable(activeKey);
+    });
+
+    async function deleteVariable(key) {
+        deleteBtn.disabled = true;
+        saveBtn.disabled = true;
+        setStatus('Deleting...', '');
+        try {
+            const resp = await fetch(
+                apiBase('/variables/' + encodeURIComponent(key)),
+                { method: 'DELETE' }
+            );
+            if (!resp.ok) {
+                const errData = await resp.json().catch(() => ({}));
+                throw new Error(errData.detail || 'HTTP ' + resp.status);
+            }
+            allVariables = allVariables.filter(function (v) { return v.key !== key; });
+            activeKey = null;
+            isNewVariable = false;
+            applyFilter(searchInput.value);
+            if (filteredVariables.length > 0) {
+                selectVariable(filteredVariables[0].key);
+            } else {
+                showEmptySelection();
+            }
+            setStatus('Variable deleted', 'ok');
+        } catch (e) {
+            console.error(e);
+            setStatus('Error deleting: ' + e.message, 'error');
+            deleteBtn.disabled = false;
+            saveBtn.disabled = false;
+        }
+    }
 
     // Инициализация
 
