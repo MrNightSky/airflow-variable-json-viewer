@@ -22,15 +22,23 @@ pip install airflow-variable-json-viewer
 
 ## Why?
 
-Airflow's default Variables UI is hard to use when working with JSON values:
-- No formatting or readability
-- Difficult to edit complex structures
-- Limited visibility into nested data
+Airflow’s Variables UI is now more of a pain than a UX update:
+
+ - Smaller input field — large data barely fits
+ - No variable renaming — must recreate instead
+ - No JSON formatting (before 3.1.8) — all data in one line
+
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/default_var_edit.png" width="800" alt="Default Airflow Variables UI"/>
   <br/>
-  <em>Default Airflow UI without JSON formatting</em>
+  <em>Default Airflow (<3.1.8) UI without JSON formatting</em>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MrNightSky/airflow-variable-json-viewer/main/docs/images/default_var_3.1.8.png" width="800" alt="Default Airflow Variables UI"/>
+  <br/>
+  <em>Default Airflow (3.1.8 or greater) UI with JSON formatting</em>
 </p>
 
 This plugin provides a clean and user-friendly interface for working with JSON-based variables.
