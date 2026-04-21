@@ -132,13 +132,6 @@
             keyDiv.textContent = v.key;
             item.appendChild(keyDiv);
 
-            if (v.is_encrypted) {
-                const badge = document.createElement('span');
-                badge.className = 'badge-encrypted';
-                badge.textContent = 'encrypted';
-                keyDiv.appendChild(badge);
-            }
-
             item.addEventListener('click', function () {
                 if (v.key === activeKey) return;
                 if (!confirmLeave()) return;
@@ -241,11 +234,7 @@
 
         saveBtn.disabled = false;
         deleteBtn.disabled = isNewVariable;
-        if (v.is_encrypted) {
-            setStatus('Value is encrypted (stored as cipher in DB, shown as decrypted here)', 'ok');
-        } else {
-            setStatus('', '');
-        }
+        setStatus('', '');
     }
 
     async function saveCurrent() {

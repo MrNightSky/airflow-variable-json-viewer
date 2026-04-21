@@ -125,10 +125,16 @@ body.dark .var-item:hover {
 
 .var-item.active {
     background: #e3f2fd;
+    outline: 1px solid var(--border-light);
+    border-radius: 4px;
+    margin: 0 6px;
 }
 
 body.dark .var-item.active {
     background: #020617;
+    outline: 1px solid #1f2933;
+    border-radius: 4px;
+    margin: 0 6px;
 }
 
 .var-key {
@@ -242,7 +248,7 @@ body.dark .field-input {
     padding: 6px 8px;
     border: 1px solid var(--border-light);
     border-radius: 4px;
-    resize: vertical;
+    resize: none;
     flex: 1;
     min-height: 260px;
 }
@@ -327,13 +333,9 @@ body.dark .empty-state {
 
 .description-section {
     margin-top: 8px;
-    border-top: 1px dashed var(--border-light);
     padding-top: 6px;
 }
 
-body.dark .description-section {
-    border-top-color: #1f2937;
-}
 
 .desc-toggle {
     display: inline-flex;
